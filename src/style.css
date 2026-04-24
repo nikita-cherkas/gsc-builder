@@ -1,0 +1,236 @@
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap");
+
+@layer theme, base, components, utilities;
+@import "tailwindcss/theme.css" layer(theme);
+@import "tailwindcss/utilities.css" layer(utilities);
+
+@custom-variant dark (&:is(.dark *));
+@config "../tailwind.config.js";
+
+@theme {
+  /* Legacy surface tokens */
+  --color-canvas: #f0ebe2;
+  --color-canvas-deep: #e8e2d6;
+  --color-panel: rgb(255 253 249 / 0.95);
+  --color-panel-solid: #fffdf9;
+  --color-edge: rgb(155 125 90 / 0.16);
+  --color-edge-strong: rgb(155 125 90 / 0.32);
+
+  --color-ink: #1c1510;
+  --color-sub: #5a5048;
+  --color-subtle: #8a7e6f;
+
+  --color-brand: #b86820;
+  --color-brand-deep: #8e4f18;
+  --color-brand-soft: rgb(184 104 32 / 0.09);
+
+  --color-good: #4f7a3a;
+  --color-warn: #b8881e;
+
+  /* Shadcn-compatible tokens mapped to copper palette so shadcn primitives
+     (Button, Card, Badge, RadioGroup, ToggleGroup...) render natively in our theme. */
+  --color-background: #f0ebe2;
+  --color-foreground: #1c1510;
+  --color-card: #fffdf9;
+  --color-card-foreground: #1c1510;
+  --color-popover: #fffdf9;
+  --color-popover-foreground: #1c1510;
+  --color-primary: #b86820;
+  --color-primary-foreground: #fffdf9;
+  --color-secondary: #e8e2d6;
+  --color-secondary-foreground: #1c1510;
+  --color-muted: rgb(0 0 0 / 0.04);
+  --color-muted-foreground: #8a7e6f;
+  --color-accent: rgb(184 104 32 / 0.09);
+  --color-accent-foreground: #b86820;
+  --color-destructive: #c0392b;
+  --color-destructive-foreground: #fffdf9;
+  --color-border: rgb(155 125 90 / 0.16);
+  --color-input: rgb(155 125 90 / 0.16);
+  --color-ring: #b86820;
+
+  --font-sans:
+    "Inter", "Inter Fallback", -apple-system, BlinkMacSystemFont, "Segoe UI",
+    system-ui, sans-serif;
+  --font-mono:
+    "Inter", "Inter Fallback", ui-monospace, "SF Mono", Menlo, Consolas,
+    monospace;
+  --font-serif: var(--font-sans);
+
+  --radius: 0.5rem;
+  --radius-card: 14px;
+  --radius-tile: 10px;
+  --radius-chip: 8px;
+  --radius-lg: 0.5rem;
+  --radius-md: calc(0.5rem - 2px);
+  --radius-sm: calc(0.5rem - 4px);
+
+  --shadow-panel:
+    0 4px 32px rgb(100 70 40 / 0.1), 0 1px 6px rgb(100 70 40 / 0.06),
+    inset 0 1px 0 rgb(255 255 255 / 0.8);
+}
+
+@layer base {
+  body {
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+  #gsc-builder-app,
+  #gsc-builder-app *,
+  #gsc-builder-modals,
+  #gsc-builder-modals * {
+    box-sizing: border-box;
+    -webkit-tap-highlight-color: transparent;
+    border-color: var(--color-border);
+  }
+
+  #gsc-builder-app {
+    width: 100%;
+    min-height: 100dvh;
+    font-family: var(--font-sans);
+    font-size: 14px;
+    line-height: 1.5;
+    color: var(--color-ink);
+    background-color: var(--color-canvas);
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+
+  #gsc-builder-app img {
+    max-width: 100%;
+    height: auto;
+    display: block;
+  }
+
+  #gsc-builder-app h1,
+  #gsc-builder-app h2,
+  #gsc-builder-app h3,
+  #gsc-builder-app h4,
+  #gsc-builder-app h5,
+  #gsc-builder-app h6,
+  #gsc-builder-app p {
+    margin: 0;
+  }
+
+  #gsc-builder-app a {
+    color: inherit;
+    text-decoration: none;
+  }
+
+  #gsc-builder-app button {
+    background-color: transparent;
+    background-image: none;
+    border: 0;
+    padding: 0;
+    margin: 0;
+    font: inherit;
+    color: inherit;
+    cursor: pointer;
+    line-height: inherit;
+  }
+
+  #gsc-builder-app button:disabled {
+    cursor: not-allowed;
+  }
+
+  #gsc-builder-app ::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+  #gsc-builder-app ::-webkit-scrollbar-thumb {
+    background: rgb(0 0 0 / 0.12);
+    border-radius: 3px;
+  }
+  #gsc-builder-app ::-webkit-scrollbar-thumb:hover {
+    background: rgb(0 0 0 / 0.2);
+  }
+  #gsc-builder-app ul,
+  .gsc-builder-app ol {
+    list-style: none;
+    padding-left: 0;
+  }
+}
+
+@layer utilities {
+  .font-display {
+    font-family: var(--font-sans);
+    font-weight: 600;
+    letter-spacing: -0.011em;
+  }
+
+  .label-mono {
+    font-family: var(--font-sans);
+    font-size: 11px;
+    line-height: 1.35;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    font-weight: 600;
+  }
+
+  .num {
+    font-feature-settings: "tnum", "cv11";
+  }
+
+  .panel {
+    background: var(--color-panel);
+    backdrop-filter: blur(28px);
+    -webkit-backdrop-filter: blur(28px);
+    border: 1px solid var(--color-edge);
+    border-radius: var(--radius-card);
+    box-shadow: var(--shadow-panel);
+  }
+
+  .tile {
+    border-radius: var(--radius-tile);
+    border: 1.5px solid var(--color-edge);
+    background: rgb(255 255 255 / 0.5);
+    transition:
+      border-color 160ms ease,
+      background 160ms ease,
+      transform 160ms ease;
+  }
+
+  .tile:hover {
+    border-color: var(--color-edge-strong);
+  }
+
+  .tile-active {
+    border-color: var(--color-brand);
+    background: var(--color-brand-soft);
+  }
+
+  .focus-ring {
+    outline: none;
+    box-shadow:
+      0 0 0 2px var(--color-canvas),
+      0 0 0 4px var(--color-brand);
+  }
+
+  .anim-fade-in {
+    animation: gsc-fade-in 240ms ease;
+  }
+
+  @keyframes gsc-fade-in {
+    from {
+      opacity: 0;
+      transform: translateY(4px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+}
+
+@theme inline {
+  --font-heading: var(--font-sans);
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+}
