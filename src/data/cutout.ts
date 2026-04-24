@@ -1,4 +1,8 @@
-import type { CutoutData } from '@/types'
+import type { CutoutData, CutoutOption } from '@/types'
+
+export const SINK_ANCHOR = 'sink-point'
+export const SINK_MODEL_URL = '/threejs/models/Sink.glb'
+export const CUTOUTS_WITH_SINK = new Set<CutoutOption>(['with-sink', 'full'])
 
 export const CUTOUT_OPTIONS: CutoutData[] = [
   {

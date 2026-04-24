@@ -3,6 +3,11 @@ import { onMounted, onBeforeUnmount, ref, watch } from "vue";
 import * as THREE from "three";
 import { useConfiguratorStore } from "@/stores/configurator";
 import { useSceneBuilderStore } from "@/stores/sceneBuilder";
+import {
+  CUTOUTS_WITH_SINK,
+  SINK_ANCHOR,
+  SINK_MODEL_URL,
+} from "@/data/cutout";
 
 const store = useConfiguratorStore();
 const sceneBuilder = useSceneBuilderStore();
@@ -101,6 +106,10 @@ onMounted(async () => {
     registerWoodMaterials(cart);
     sceneBuilder.setTableWoodVariant(sceneBuilder.tableWoodVariant);
     sceneBuilder.setCartRoot(cart);
+
+    if (CUTOUTS_WITH_SINK.has(store.config.cutout)) {
+      sceneBuilder.placeAtAnchor(SINK_ANCHOR, SINK_MODEL_URL);
+    }
   }
 
   sceneBuilder.setAutoRotate(store.autoRotate);
