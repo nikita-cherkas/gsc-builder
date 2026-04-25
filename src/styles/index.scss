@@ -1,0 +1,15 @@
+@use './main';
+
+// Lightweight utility classes.
+.stack {
+  display: flex;
+  flex-direction: column;
+
+  &_3 {
+    gap: 12px;
+  }
+
+  &_4 {
+    gap: 16px;
+  }
+}

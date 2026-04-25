@@ -24,27 +24,75 @@ function inc() {
 </script>
 
 <template>
-  <div class="inline-flex items-center gap-1 rounded-lg border border-border bg-card p-1">
+  <div class="counter">
     <button
       type="button"
       :disabled="props.value <= props.min"
       aria-label="Decrease"
-      class="flex h-7 w-7 items-center justify-center rounded-md text-foreground text-lg leading-none transition hover:bg-muted disabled:opacity-30 disabled:cursor-not-allowed"
+      class="counter__btn"
       @click="dec"
     >
       −
     </button>
-    <span class="font-mono text-sm font-semibold text-foreground w-6 text-center tabular-nums">
-      {{ props.value }}
-    </span>
+    <span class="counter__value">{{ props.value }}</span>
     <button
       type="button"
       :disabled="props.value >= props.max"
       aria-label="Increase"
-      class="flex h-7 w-7 items-center justify-center rounded-md text-foreground text-lg leading-none transition hover:bg-muted disabled:opacity-30 disabled:cursor-not-allowed"
+      class="counter__btn"
       @click="inc"
     >
       +
     </button>
   </div>
 </template>
+
+<style lang="scss" scoped>
+@use '@/styles/colors' as colors;
+
+.counter {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px;
+  border: 1px solid colors.$gray-300;
+  background: colors.$white;
+  border-radius: 10px;
+
+  &__btn {
+    width: 28px;
+    height: 28px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border: none;
+    background: transparent;
+    color: colors.$black;
+    font-size: 18px;
+    line-height: 1;
+    cursor: pointer;
+    border-radius: 6px;
+    transition: background 0.2s ease;
+
+    @media (hover: hover) {
+      &:not(:disabled):hover {
+        background: colors.$gray-10;
+      }
+    }
+
+    &:disabled {
+      opacity: 0.3;
+      cursor: not-allowed;
+    }
+  }
+
+  &__value {
+    width: 24px;
+    color: colors.$black;
+    font-size: 14px;
+    font-weight: 600;
+    text-align: center;
+    font-variant-numeric: tabular-nums;
+  }
+}
+</style>

@@ -122,7 +122,23 @@ watch(
 </script>
 
 <template>
-  <div class="relative h-full w-full touch-none select-none">
-    <div ref="containerRef" id="builder" class="absolute inset-0" />
+  <div class="viewport">
+    <div ref="containerRef" id="builder" class="viewport__canvas" />
   </div>
 </template>
+
+<style scoped>
+.viewport {
+  position: relative;
+  height: 100%;
+  width: 100%;
+  touch-action: none;
+  user-select: none;
+}
+
+.viewport__canvas {
+  position: absolute;
+  inset: 0;
+  cursor: grab;
+}
+</style>

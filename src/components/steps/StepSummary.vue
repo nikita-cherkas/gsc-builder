@@ -58,71 +58,143 @@ const equipmentRows = computed<[string, string][]>(() =>
 </script>
 
 <template>
-  <div class="space-y-5">
-    <!-- Cart spec -->
-    <div>
-      <div class="text-[11px] uppercase tracking-wider text-muted-foreground font-semibold mb-2">
-        Cart
-      </div>
-      <dl class="rounded-lg border border-border bg-card divide-y divide-border overflow-hidden">
-        <div
-          v-for="[k, v] in cartRows"
-          :key="k"
-          class="flex items-baseline justify-between gap-3 px-4 py-2.5 text-[13px]"
-        >
-          <dt class="text-[11px] uppercase tracking-wider text-muted-foreground font-semibold">
-            {{ k }}
-          </dt>
-          <dd class="text-foreground text-right">{{ v }}</dd>
+  <div class="step-summary">
+    <section class="step-summary__section">
+      <div class="step-summary__heading">Cart</div>
+      <dl class="step-summary__list">
+        <div v-for="[k, v] in cartRows" :key="k" class="step-summary__row">
+          <dt class="step-summary__row-label">{{ k }}</dt>
+          <dd class="step-summary__row-value">{{ v }}</dd>
         </div>
       </dl>
-    </div>
+    </section>
 
-    <!-- Equipment spec -->
-    <div v-if="equipmentRows.length > 0">
-      <div class="text-[11px] uppercase tracking-wider text-muted-foreground font-semibold mb-2">
-        Equipment
-      </div>
-      <dl class="rounded-lg border border-border bg-card divide-y divide-border overflow-hidden">
-        <div
-          v-for="[k, v] in equipmentRows"
-          :key="`${k}-${v}`"
-          class="flex items-baseline justify-between gap-3 px-4 py-2.5 text-[13px]"
-        >
-          <dt class="text-[11px] uppercase tracking-wider text-muted-foreground font-semibold">
-            {{ k }}
-          </dt>
-          <dd class="text-foreground text-right">{{ v }}</dd>
+    <section v-if="equipmentRows.length > 0" class="step-summary__section">
+      <div class="step-summary__heading">Equipment</div>
+      <dl class="step-summary__list">
+        <div v-for="[k, v] in equipmentRows" :key="`${k}-${v}`" class="step-summary__row">
+          <dt class="step-summary__row-label">{{ k }}</dt>
+          <dd class="step-summary__row-value">{{ v }}</dd>
         </div>
       </dl>
-    </div>
+    </section>
 
-    <!-- Price breakdown -->
-    <div>
-      <div class="text-[11px] uppercase tracking-wider text-muted-foreground font-semibold mb-2">
-        Price breakdown
-      </div>
-      <ul class="rounded-lg border border-border bg-card divide-y divide-border overflow-hidden">
-        <li
-          v-for="(l, i) in store.priceLines"
-          :key="i"
-          class="flex items-baseline justify-between gap-3 px-4 py-2.5 text-[13px]"
-        >
-          <span class="text-sub truncate">{{ l.label }}</span>
-          <span class="text-foreground font-semibold tabular-nums shrink-0">
-            {{ formatPrice(l.amount) }}
-          </span>
+    <section class="step-summary__section">
+      <div class="step-summary__heading">Price breakdown</div>
+      <ul class="step-summary__list">
+        <li v-for="(l, i) in store.priceLines" :key="i" class="step-summary__row">
+          <span class="step-summary__price-label">{{ l.label }}</span>
+          <span class="step-summary__price-value">{{ formatPrice(l.amount) }}</span>
         </li>
-        <li class="flex items-baseline justify-between gap-3 px-4 py-3 bg-primary/8">
-          <span class="text-[11px] uppercase tracking-wider text-primary font-semibold">Total</span>
-          <span class="text-xl font-semibold text-foreground tabular-nums">
-            {{ formatPrice(store.total) }}
-          </span>
+        <li class="step-summary__row step-summary__row_total">
+          <span class="step-summary__total-label">Total</span>
+          <span class="step-summary__total-value">{{ formatPrice(store.total) }}</span>
         </li>
       </ul>
-      <p class="text-[11px] text-muted-foreground mt-2 leading-snug">
+      <p class="step-summary__legal">
         Estimate only. Final quote includes freight, setup, and any local taxes.
       </p>
-    </div>
+    </section>
   </div>
 </template>
+
+<style lang="scss" scoped>
+@use '@/styles/colors' as colors;
+
+.step-summary {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+
+  &__section {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  &__heading {
+    color: colors.$gray;
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+  }
+
+  &__list {
+    border: 1px solid colors.$gray-300;
+    background: colors.$white;
+    border-radius: 12px;
+    overflow: hidden;
+    margin: 0;
+    padding: 0;
+
+    > * + * {
+      border-top: 1px solid colors.$gray-300;
+    }
+  }
+
+  &__row {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 10px 16px;
+    font-size: 13px;
+    margin: 0;
+
+    &_total {
+      padding: 14px 16px;
+      background: rgba(255, 107, 0, 0.08);
+    }
+  }
+
+  &__row-label {
+    color: colors.$gray;
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+  }
+
+  &__row-value {
+    color: colors.$black;
+    text-align: right;
+  }
+
+  &__price-label {
+    color: colors.$gray-900;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  &__price-value {
+    flex-shrink: 0;
+    color: colors.$black;
+    font-weight: 600;
+    font-variant-numeric: tabular-nums;
+  }
+
+  &__total-label {
+    color: colors.$orange-medium;
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+  }
+
+  &__total-value {
+    color: colors.$black;
+    font-size: 20px;
+    font-weight: 700;
+    font-variant-numeric: tabular-nums;
+  }
+
+  &__legal {
+    color: colors.$gray;
+    font-size: 11px;
+    line-height: 1.5;
+    margin-top: 4px;
+  }
+}
+</style>

@@ -56,10 +56,7 @@ export default class EquipmentManager {
     return this.items.get(id);
   }
 
-  static findAnchor(
-    root: THREE.Object3D,
-    name: string,
-  ): THREE.Object3D | null {
+  static findAnchor(root: THREE.Object3D, name: string): THREE.Object3D | null {
     return root.getObjectByName(name) ?? null;
   }
 
@@ -144,7 +141,8 @@ export default class EquipmentManager {
       console.warn(`[EquipmentManager] anchor "${anchorName}" not found`);
       return null;
     }
-    if (typeof source === "string") return this.addFromUrl(anchor, source, transform);
+    if (typeof source === "string")
+      return this.addFromUrl(anchor, source, transform);
     return this.add(anchor, source, transform);
   }
 

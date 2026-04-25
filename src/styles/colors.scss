@@ -1,0 +1,48 @@
+@use 'sass:color';
+
+$transparent: rgb(0 0 0 / 0%);
+
+$black: #171B1C;
+$gray: #5F5F5F;
+$gray-900: #7F7F7F;
+$gray-medium: #8F8F8F;
+$gray-500: #A0A0A0;
+$gray-400: #BFBFBF;
+$gray-light: #B0B0B0;
+$gray-350: #B0B6BE;
+$gray-border: #D9D9D9;
+$gray-300: #E0E0E0;
+$gray-100: #EFEFEF;
+$gray-75: #DCDCDC;
+$gray-50: #F1F1F1;
+$gray-20: #EFF0F1;
+$gray-15: #F7F7F7;
+$gray-10: #F5F5F5;
+$gray-5: #FAFAFA;
+$white: #FFFFFF;
+$blue: #007BFF;
+$blue-10: #F1F6FF;
+$blue-light: #D8DEE6;
+$orange: #E46000;
+$orange-900: #EA580C;
+$orange-medium: #FF6B00;
+$orange-light: #F69924;
+$orange-10: #FFF7F1;
+$orange-5: #FFF8F2;
+$red: #F00000;
+$red-light: #FE6767;
+$green: #90CC5A;
+$disabled: #D0D0D0;
+$white-transparent: rgba(255, 255, 255, 0.6);
+
+$canvas: #F5F1EA;
+
+$overlay: rgba(0, 0, 0, 0.45);
+$modal-bg: rgba(23, 27, 28, 0.45);
+
+$step-shadow: 1px 1px 10px 0 rgba(0, 0, 0, 0.05);
+$card-shadow: 0 4px 6px -1px rgba(0, 0, 0, .1), 0 2px 4px -2px rgba(0, 0, 0, .1);
+$mobile-steps-shadow: 5px -5px 15px 2px rgba(0, 0, 0, 0.05);
+$tooltip-shadow: 8px 3px 22px 10px rgba(101, 136, 171, 0.11);
+$main-shadow: 4px 4px 14px 0 rgba(0, 0, 0, 0.04);
+$social-shadow: 1px 1px 10px 0 #60666E1A;

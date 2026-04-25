@@ -1,0 +1,234 @@
+@use '@/styles/colors' as colors;
+@use '@/styles/media-breakpoints' as breakpoints;
+
+.base-input {
+  border-radius: 10px;
+
+  &__placeholder {
+    font-weight: 500;
+    font-size: 12px;
+    line-height: 1.45;
+    color: colors.$gray;
+    position: absolute;
+    pointer-events: none;
+    left: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    width: calc(100% - 26px);
+
+    &_focus {
+      display: none;
+    }
+  }
+
+  &_focus {
+    .base-input__input-wrapper {
+      outline: 1px solid colors.$gray-light;
+    }
+  }
+
+  &_error {
+    color: colors.$red;
+
+    .base-input__input-wrapper {
+      outline: 1px solid colors.$red;
+    }
+
+    .base-input__placeholder {
+      color: colors.$red;
+      width: calc(100% - 50px);
+    }
+
+    .base-input__input {
+      color: colors.$red;
+      padding-right: 50px;
+    }
+
+    .base-input__label {
+      color: colors.$red;
+    }
+  }
+
+  &__label {
+    font-size: 13px;
+    font-weight: 500;
+    line-height: 1;
+    color: colors.$black;
+    margin-bottom: 6px;
+
+    @include breakpoints.media-breakpoint-down(xs) {
+      font-size: 12px;
+    }
+  }
+
+  &__input {
+    width: 100%;
+    font-weight: 400;
+    font-size: 14px;
+    height: 100%;
+    background-color: colors.$gray-5;
+    color: colors.$black;
+    padding: 15px;
+    border-radius: 10px;
+
+    @include breakpoints.media-breakpoint-down(xs) {
+      font-size: 16px;
+    }
+
+    &-wrapper {
+      width: 100%;
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      border-radius: 10px;
+    }
+  }
+
+  &__error-icon {
+    width: 20px;
+    height: 19px;
+    fill: colors.$red;
+    position: absolute;
+    right: 14px;
+    top: 50%;
+    transform: translateY(-50%);
+  }
+
+  &__check {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 19px;
+    height: 19px;
+    border-radius: 50%;
+    background-color: colors.$green;
+    position: absolute;
+    right: 14px;
+    top: 50%;
+    transform: translateY(-50%);
+
+    &-icon {
+      width: 10px;
+      height: 8px;
+      fill: colors.$white;
+    }
+  }
+
+  input[type='password'] {
+    font-weight: 900;
+    letter-spacing: 3px;
+    text-shadow: 0 0 1px colors.$black;
+    -webkit-text-security: disc;
+    font-size: 1.4em;
+    margin-top: 5px;
+    border-radius: 0 0 40px 40px;
+  }
+
+  &__icons {
+    align-self: center;
+    height: 100%;
+    display: flex;
+    align-items: center;
+
+    &.base-input__icons_right.base-input__icons_size-default {
+      padding-right: 16px;
+    }
+
+    &.base-input__icons_left.base-input__icons_size-default {
+      padding-left: 16px;
+    }
+  }
+
+  &_right-btn {
+    .base-input__input {
+      border-radius: 4px 0 0 4px;
+    }
+  }
+
+  &_disabled {
+    outline: 1px solid colors.$disabled;
+    cursor: default;
+    pointer-events: none;
+
+    .base-input__placeholder,
+    .base-input__input {
+      color: colors.$disabled;
+    }
+  }
+
+  &_size {
+    &-lg {
+      .base-input__input {
+        padding: 14px;
+        font-size: 16px;
+      }
+    }
+
+    &-md {
+      .base-input__input {
+        padding: 13px;
+        font-size: 14px;
+      }
+
+      .base-input__placeholder {
+        top: 11px;
+        font-size: 14px;
+
+        &_focus {
+          font-size: 11px;
+        }
+      }
+    }
+
+    &-sm {
+      .base-input__input {
+        padding: 8px;
+        font-size: 14px;
+      }
+
+      .base-input__placeholder {
+        top: 9px;
+        font-size: 14px;
+
+        &_focus {
+          display: none;
+        }
+      }
+    }
+
+    &-custom {
+      height: 40px;
+
+      .base-input__input {
+        padding: 8px;
+        font-size: 16px;
+      }
+
+      .base-input__placeholder {
+        top: 10px;
+        font-size: 16px;
+
+        &_focus {
+          font-size: 11px;
+          transform: translateY(-11px) translateZ(0) translateX(-2px);
+        }
+      }
+    }
+  }
+
+  &__tooltip {
+    width: 24px;
+    height: 24px;
+  }
+}
+
+.base-tooltip__icon {
+  width: 24px;
+  height: 24px;
+  color: #44a2f8;
+  stroke: #44a2f8;
+}

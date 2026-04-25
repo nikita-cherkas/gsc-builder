@@ -73,6 +73,8 @@ export default class CoffeeApplication {
 
     this.resize();
     requestAnimationFrame(() => this.resize());
+
+    this.initFloor();
   }
 
   resize(): void {
@@ -173,6 +175,48 @@ export default class CoffeeApplication {
     const box = new THREE.Box3().setFromObject(mesh);
     this.targetToLookAt = box.getCenter(new THREE.Vector3());
     this.isAnimatingCamera = true;
+  }
+
+  private initFloor(): void {
+    const textureLoader = new THREE.TextureLoader();
+    const path = "/threejs/textures/floor/";
+
+    const mapColor = textureLoader.load(`${path}laminate_floor_02_diff_2k.jpg`);
+    const mapRoughness = textureLoader.load(
+      `${path}laminate_floor_02_rough_2k.jpg`,
+    );
+    const mapNormal = textureLoader.load(
+      `${path}laminate_floor_02_nor_gl_2k.jpg`,
+    );
+
+    mapColor.colorSpace = THREE.SRGBColorSpace;
+    mapRoughness.colorSpace = THREE.NoColorSpace;
+    mapNormal.colorSpace = THREE.NoColorSpace;
+
+    const repeat = 10;
+    [mapColor, mapRoughness, mapNormal].forEach((t) => {
+      t.wrapS = THREE.RepeatWrapping;
+      t.wrapT = THREE.RepeatWrapping;
+      t.repeat.set(repeat, repeat);
+
+      t.anisotropy = this.renderer.instance.capabilities.getMaxAnisotropy();
+    });
+
+    const floorMat = new THREE.MeshStandardMaterial({
+      map: mapColor,
+      roughnessMap: mapRoughness,
+      normalMap: mapNormal,
+      normalScale: new THREE.Vector2(0.6, 0.6),
+      roughness: 1.0,
+    });
+
+    const floorGeo = new THREE.PlaneGeometry(150, 150);
+    const floor = new THREE.Mesh(floorGeo, floorMat);
+
+    floor.rotation.x = -Math.PI / 2;
+    floor.position.y = 0;
+    floor.receiveShadow = true;
+    this.scene.add(floor);
   }
 
   dispose(): void {

@@ -9,7 +9,6 @@ import {
   getSelectedInCategory,
 } from "@/lib/equipment";
 import { resolveAnchor } from "@/data/anchors";
-import { cn } from "@/lib/utils";
 import EquipmentModal from "@/components/modals/equipment/EquipmentModal.vue";
 import { Check, ChevronRight, Pencil } from "lucide-vue-next";
 import type { EquipmentGroupData, EquipmentItem } from "@/types";
@@ -96,26 +95,22 @@ function totalOptions(category: EquipmentGroupData): number {
 </script>
 
 <template>
-  <div class="space-y-3">
-    <p class="text-[12.5px] text-muted-foreground leading-snug">
+  <div class="step-equipment">
+    <p class="step-equipment__hint">
       Tap a category to browse models, filter by brand, and pick your equipment.
     </p>
 
     <div
       v-for="category in categories"
       :key="category.name"
-      :class="
-        cn(
-          'flex items-stretch overflow-hidden rounded-lg border bg-card transition w-full',
-          previewFor(category).length > 0
-            ? 'border-primary'
-            : 'border-border hover:border-foreground/30',
-        )
-      "
+      :class="[
+        'eq-row',
+        { 'eq-row_active': previewFor(category).length > 0 },
+      ]"
     >
       <button
         type="button"
-        class="flex items-stretch flex-1 min-w-0 text-left"
+        class="eq-row__main"
         :title="
           previewFor(category).length > 0
             ? 'Click to remove selection'
@@ -123,82 +118,59 @@ function totalOptions(category: EquipmentGroupData): number {
         "
         @click="onCategoryClick(category)"
       >
-        <div
-          :class="
-            cn(
-              'flex w-16 sm:w-20 shrink-0 items-center justify-center border-r border-border/60 p-2',
-              previewFor(category).length > 0
-                ? 'text-primary'
-                : 'text-muted-foreground',
-            )
-          "
-        >
+        <div class="eq-row__icon-cell">
           <img
             v-if="category.icon"
             :src="category.icon"
             :alt="category.name"
-            class="h-10 w-10 object-contain"
+            class="eq-row__icon"
             loading="lazy"
             onerror="this.style.display = 'none'"
           />
         </div>
 
-        <div class="min-w-0 flex-1 p-3">
-          <div class="flex items-start gap-3">
-            <span
-              :class="
-                cn(
-                  'mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-full border-2 transition',
-                  previewFor(category).length > 0
-                    ? 'border-primary bg-primary text-primary-foreground'
-                    : 'border-muted-foreground/40',
-                )
-              "
-            >
-              <Check v-if="previewFor(category).length > 0" class="h-3 w-3" />
-            </span>
+        <div class="eq-row__body">
+          <span :class="['eq-row__check', { 'eq-row__check_on': previewFor(category).length > 0 }]">
+            <Check v-if="previewFor(category).length > 0" />
+          </span>
 
-            <div class="min-w-0 flex-1">
-              <div class="flex items-baseline justify-between gap-2">
-                <span class="font-medium">{{ category.name }}</span>
-                <span
-                  v-if="previewFor(category).length > 0"
-                  class="shrink-0 text-sm tabular-nums"
-                >
-                  +{{
-                    formatPrice(
-                      previewFor(category).reduce(
-                        (s, i) => s + (i.price ?? 0),
-                        0,
-                      ),
-                    )
-                  }}
-                </span>
-                <span
-                  v-else
-                  class="shrink-0 text-[11px] uppercase tracking-wider text-muted-foreground font-semibold"
-                >
-                  {{ totalOptions(category) }} option{{
-                    totalOptions(category) === 1 ? "" : "s"
-                  }}
-                </span>
-              </div>
-              <p
+          <div class="eq-row__content">
+            <div class="eq-row__heading">
+              <span class="eq-row__name">{{ category.name }}</span>
+              <span
                 v-if="previewFor(category).length > 0"
-                class="mt-0.5 text-sm text-muted-foreground truncate"
+                class="eq-row__price"
               >
-                {{
-                  previewFor(category)
-                    .map((i) => i.attributes?.Option || i.name)
-                    .join(", ")
+                +{{
+                  formatPrice(
+                    previewFor(category).reduce(
+                      (s, i) => s + (i.price ?? 0),
+                      0,
+                    ),
+                  )
                 }}
-              </p>
-              <p
-                v-else-if="category.description"
-                class="mt-0.5 text-sm text-muted-foreground line-clamp-2"
-                v-html="category.description"
-              />
+              </span>
+              <span v-else class="eq-row__count">
+                {{ totalOptions(category) }} option{{
+                  totalOptions(category) === 1 ? "" : "s"
+                }}
+              </span>
             </div>
+            <p
+              v-if="previewFor(category).length > 0"
+              class="eq-row__chosen"
+            >
+              {{
+                previewFor(category)
+                  .map((i) => i.attributes?.Option || i.name)
+                  .join(", ")
+              }}
+            </p>
+            <p
+              v-else-if="category.description"
+              class="eq-row__description"
+              v-html="category.description"
+            />
           </div>
         </div>
       </button>
@@ -206,17 +178,14 @@ function totalOptions(category: EquipmentGroupData): number {
       <button
         v-if="previewFor(category).length > 0"
         type="button"
-        class="flex w-10 shrink-0 items-center justify-center border-l border-border text-muted-foreground hover:bg-muted hover:text-foreground transition"
+        class="eq-row__edit"
         :title="`Change ${category.name.toLowerCase()}`"
         @click="onCategoryEdit(category, $event)"
       >
-        <Pencil class="h-4 w-4" />
+        <Pencil />
       </button>
-      <div
-        v-else
-        class="flex w-10 shrink-0 items-center justify-center border-l border-border text-muted-foreground"
-      >
-        <ChevronRight class="h-4 w-4" />
+      <div v-else class="eq-row__chevron">
+        <ChevronRight />
       </div>
     </div>
 
@@ -230,3 +199,201 @@ function totalOptions(category: EquipmentGroupData): number {
     />
   </div>
 </template>
+
+<style lang="scss" scoped>
+@use '@/styles/colors' as colors;
+@use '@/styles/media-breakpoints' as breakpoints;
+
+.step-equipment {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+
+  &__hint {
+    color: colors.$gray;
+    font-size: 12.5px;
+    line-height: 1.5;
+  }
+}
+
+.eq-row {
+  display: flex;
+  align-items: stretch;
+  width: 100%;
+  border: 1px solid colors.$gray-300;
+  background: colors.$white;
+  border-radius: 12px;
+  overflow: hidden;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+
+  &_active {
+    border-color: colors.$orange-medium;
+    box-shadow: 0 0 0 3px rgba(255, 107, 0, 0.08);
+  }
+
+  @media (hover: hover) {
+    &:not(.eq-row_active):hover {
+      border-color: colors.$gray-light;
+    }
+  }
+
+  &__main {
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    align-items: stretch;
+    text-align: left;
+    border: none;
+    background: transparent;
+    cursor: pointer;
+    padding: 0;
+  }
+
+  &__icon-cell {
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 64px;
+    padding: 8px;
+    border-right: 1px solid colors.$gray-300;
+    background: colors.$gray-5;
+
+    @include breakpoints.media-breakpoint-up(xs) {
+      width: 80px;
+    }
+  }
+
+  &__icon {
+    width: 40px;
+    height: 40px;
+    object-fit: contain;
+  }
+
+  &__body {
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 12px;
+  }
+
+  &__check {
+    flex-shrink: 0;
+    margin-top: 2px;
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    border: 2px solid colors.$gray-light;
+    background: colors.$white;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    color: colors.$white;
+    transition: border-color 0.2s ease, background 0.2s ease;
+
+    svg {
+      width: 12px;
+      height: 12px;
+    }
+
+    &_on {
+      border-color: colors.$orange-medium;
+      background: colors.$orange-medium;
+    }
+  }
+
+  &__content {
+    flex: 1;
+    min-width: 0;
+  }
+
+  &__heading {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 8px;
+  }
+
+  &__name {
+    color: colors.$black;
+    font-size: 14px;
+    font-weight: 600;
+  }
+
+  .eq-row_active &__name {
+    color: colors.$orange-medium;
+  }
+
+  &__price {
+    flex-shrink: 0;
+    color: colors.$gray;
+    font-size: 13px;
+    font-variant-numeric: tabular-nums;
+  }
+
+  &__count {
+    flex-shrink: 0;
+    color: colors.$gray;
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+  }
+
+  &__chosen {
+    margin-top: 2px;
+    color: colors.$gray-900;
+    font-size: 13px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  &__description {
+    margin-top: 2px;
+    color: colors.$gray-900;
+    font-size: 13px;
+    line-height: 1.4;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  &__edit,
+  &__chevron {
+    flex-shrink: 0;
+    width: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: none;
+    border-left: 1px solid colors.$gray-300;
+    background: colors.$white;
+    color: colors.$gray;
+    cursor: pointer;
+    transition: background 0.2s ease, color 0.2s ease;
+
+    svg {
+      width: 16px;
+      height: 16px;
+    }
+  }
+
+  &__edit {
+    @media (hover: hover) {
+      &:hover {
+        background: colors.$gray-10;
+        color: colors.$black;
+      }
+    }
+  }
+
+  &__chevron {
+    cursor: default;
+  }
+}
+</style>

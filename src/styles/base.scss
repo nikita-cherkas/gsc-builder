@@ -1,0 +1,38 @@
+@use './fonts/montserrat/montserrat-font';
+@use './fonts/unbounded/unbounded-font';
+
+$font-primary: 'Montserrat', sans-serif;
+$font-secondary: 'Unbounded', sans-serif;
+
+$transition-duration: 0.3s;
+
+$modal-max-width: 990px;
+$modal-md-max-width: 640px;
+$modal-sm-max-width: 415px;
+
+$sidebar-width: 440px;
+$scrollbar-width: 4px;
+
+$toolbar-height: 100px;
+$toolbar-xs-height: 56px;
+
+$carousel-height: 80px;
+$carousel-xs-height: 45px;
+
+@mixin prevent-selection {
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+@mixin font-primary {
+  font-family: $font-primary;
+  letter-spacing: -0.02em;
+}
+
+@mixin font-secondary {
+  font-family: $font-secondary;
+  letter-spacing: -0.03em;
+}

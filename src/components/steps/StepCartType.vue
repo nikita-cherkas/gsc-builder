@@ -15,7 +15,7 @@ const ICONS: Record<CartType, Component> = {
 </script>
 
 <template>
-  <div class="space-y-3">
+  <div class="stack stack_3">
     <RadioCard
       v-for="opt in CART_TYPE_OPTIONS"
       :key="opt.id"

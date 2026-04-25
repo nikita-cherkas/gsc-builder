@@ -55,7 +55,7 @@ function setMaterial(id: TopMaterial) {
     @back="infoFor = null"
   />
 
-  <div v-else class="space-y-3">
+  <div v-else class="stack stack_3">
     <RadioCard
       v-for="opt in TOP_MATERIAL_OPTIONS"
       :key="opt.id"

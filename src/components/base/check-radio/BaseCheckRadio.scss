@@ -1,0 +1,51 @@
+@use '@/styles/colors' as colors;
+@use '@/styles/media-breakpoints' as breakpoints;
+
+.base-radio {
+  &__container {
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 3px;
+  }
+
+  &__box {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid colors.$black;
+    border-radius: 5px;
+    width: 20px;
+    height: 20px;
+    background-color: colors.$white;
+
+    &-icon {
+      width: 14px;
+      height: 15px;
+      fill: colors.$orange-light;
+    }
+
+    &-error {
+      width: 19px;
+      height: 18px;
+      fill: colors.$red;
+    }
+  }
+
+  &_checked {
+    .base-radio__box {
+      border: 1px solid colors.$orange-light;
+    }
+  }
+
+  &_error {
+    .base-radio__box {
+      border: 1px solid colors.$red;
+    }
+  }
+
+  &__input {
+    display: none;
+  }
+}

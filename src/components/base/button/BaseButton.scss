@@ -1,0 +1,281 @@
+@use '@/styles/colors' as colors;
+@use '@/styles/media-breakpoints' as breakpoints;
+
+.base-button {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 5px;
+  border-radius: 10px;
+  padding: 5px 10px;
+  color: colors.$white;
+  font-weight: 600;
+  font-size: 16px;
+  line-height: 1;
+  cursor: pointer;
+  border-style: none;
+  transition:
+    background-color 0.3s ease,
+    color 0.3s ease,
+    border 0.3s ease;
+
+  @include breakpoints.media-breakpoint-down(xs) {
+    font-size: 14px;
+  }
+
+  @media (hover: hover) {
+    &:not(:disabled):hover {
+      background-color: colors.$orange-medium;
+    }
+  }
+
+  &:not(:disabled):active,
+  &:not(:disabled).router-link-active,
+  &:not(:disabled).base-button_active {
+    background-color: colors.$orange;
+  }
+
+  &:disabled {
+    cursor: initial;
+    background-color: colors.$disabled;
+  }
+
+  &__icon {
+    width: 18px;
+    height: 18px;
+    fill: colors.$white;
+    transition:
+      fill 0.3s ease,
+      color 0.3s ease;
+  }
+
+  &_variant {
+    &-primary {
+      background: colors.$black;
+    }
+
+    &-orange {
+      background-color: colors.$orange-light;
+    }
+
+    &-gray {
+      background-color: colors.$white;
+      color: colors.$gray-light;
+      border-top: 1px solid colors.$gray-50;
+
+      .base-button__icon {
+        fill: colors.$gray-light;
+      }
+
+      @media (hover: hover) {
+        &:not(:disabled):hover {
+          background-color: colors.$gray-medium;
+          border-top: 1px solid colors.$gray-medium;
+          color: colors.$white;
+
+          .base-button__icon {
+            fill: colors.$white;
+          }
+        }
+      }
+
+      &:not(:disabled):active,
+      &:not(:disabled).router-link-active,
+      &:not(:disabled).base-button_active {
+        background-color: colors.$gray;
+        border-top: 1px solid colors.$gray;
+        color: colors.$white;
+
+        .base-button__icon {
+          fill: colors.$white;
+        }
+      }
+    }
+
+    &-outlined {
+      background-color: colors.$transparent;
+      color: colors.$black;
+      border: 1.5px solid colors.$black;
+
+      .base-button__icon {
+        fill: colors.$black;
+      }
+
+      @media (hover: hover) {
+        &:not(:disabled):hover {
+          background-color: colors.$transparent;
+          color: colors.$orange-medium;
+          border: 1.5px solid colors.$orange-medium;
+
+          .base-button__icon {
+            fill: colors.$orange-medium;
+          }
+        }
+      }
+
+      &:not(:disabled):active,
+      &:not(:disabled).router-link-active,
+      &:not(:disabled).base-button_active {
+        background-color: colors.$transparent;
+        color: colors.$orange;
+        border: 1.5px solid colors.$orange;
+
+        .base-button__icon {
+          fill: colors.$orange;
+        }
+      }
+
+      &:disabled {
+        background-color: colors.$transparent;
+        color: colors.$disabled;
+        border: 1.5px solid colors.$disabled;
+
+        .base-button__icon {
+          fill: colors.$disabled;
+        }
+      }
+    }
+
+    &-text {
+      background-color: colors.$white;
+      color: colors.$orange-light;
+
+      .base-button__icon {
+        fill: colors.$orange-light;
+      }
+
+      @media (hover: hover) {
+        &:not(:disabled):hover {
+          background-color: colors.$white;
+          color: colors.$orange-medium;
+
+          .base-button__icon {
+            fill: colors.$orange-medium;
+          }
+        }
+      }
+
+      &:not(:disabled):active,
+      &:not(:disabled).router-link-active,
+      &:not(:disabled).base-button_active {
+        background-color: colors.$white;
+        color: colors.$orange;
+
+        .base-button__icon {
+          fill: colors.$orange;
+        }
+      }
+
+      &:disabled {
+        background-color: colors.$white;
+        color: colors.$disabled;
+
+        .base-button__icon {
+          fill: colors.$disabled;
+        }
+      }
+    }
+
+    &-square {
+      padding: 0;
+      width: 52px;
+      height: 52px;
+      box-shadow: colors.$main-shadow;
+      background-color: colors.$white;
+
+      backdrop-filter: blur(8px);
+      background-color: colors.$white-transparent;
+      -webkit-backdrop-filter: blur(8px);
+      border: 1px solid rgba(255, 255, 255, 0.4);
+
+      @include breakpoints.media-breakpoint-down(xl) {
+        width: 46px;
+        height: 46px;
+      }
+
+      @include breakpoints.media-breakpoint-down(md) {
+        width: 52px;
+        height: 52px;
+      }
+
+      @include breakpoints.media-breakpoint-down(xs) {
+        width: 46px;
+        height: 46px;
+      }
+
+      &:disabled {
+        background-color: colors.$white;
+
+        .base-button__icon {
+          color: colors.$disabled;
+        }
+      }
+      &:not(:disabled):active,
+      &:not(:disabled).router-link-active,
+      &:not(:disabled).base-button_active {
+        background-color: colors.$white;
+      }
+
+      @media (hover: hover) {
+        &:not(:disabled):hover {
+          background-color: colors.$white;
+
+          .base-button__icon {
+            color: colors.$orange-medium;
+            fill: colors.$orange-medium;
+          }
+        }
+      }
+
+      .base-button__icon {
+        width: 25px;
+        height: 25px;
+        color: colors.$black;
+        fill: colors.$black;
+
+        @include breakpoints.media-breakpoint-down(xl) {
+          width: 20px;
+          height: 20px;
+        }
+
+        @include breakpoints.media-breakpoint-down(md) {
+          width: 25px;
+          height: 25px;
+        }
+
+        @include breakpoints.media-breakpoint-down(xs) {
+          width: 20px;
+          height: 20px;
+        }
+      }
+    }
+  }
+
+  &_form {
+    &-square {
+      border-radius: 0;
+    }
+  }
+
+  &_size {
+    &-default {
+      min-height: 44px;
+
+      @include breakpoints.media-breakpoint-down(xs) {
+        min-height: 40px;
+      }
+    }
+
+    &-lg {
+      min-height: 69px;
+
+      @include breakpoints.media-breakpoint-down(xl) {
+        min-height: 60px;
+      }
+
+      @include breakpoints.media-breakpoint-down(sm) {
+        min-height: 56px;
+      }
+    }
+  }
+}

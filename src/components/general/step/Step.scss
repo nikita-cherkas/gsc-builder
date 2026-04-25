@@ -1,0 +1,52 @@
+@use '@/styles/colors' as colors;
+@use '@/styles/base' as base;
+
+.step {
+  padding: 0 calc(20px - #{base.$scrollbar-width}) 30px 20px;
+  border-bottom: 1px solid colors.$gray-50;
+
+  &__icon {
+    width: 23px;
+    height: 23px;
+    fill: colors.$gray-500;
+    cursor: pointer;
+    flex-shrink: 0;
+  }
+  &__header {
+    display: grid;
+    flex-direction: column;
+    row-gap: 10px;
+    margin-bottom: 10px;
+  }
+  &__row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+  }
+  &__title {
+    @include base.font-secondary;
+    font-weight: 400;
+    font-size: 20px;
+    line-height: 1.15;
+    text-transform: capitalize;
+    color: colors.$black;
+    margin: 0;
+  }
+  &__section-title {
+    @include base.font-secondary; // Если шрифт тот же
+    font-weight: 500;
+    font-size: 25px;
+    line-height: 1.2;
+    color: colors.$black;
+    margin: 0;
+  }
+
+  &__description {
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 1.45;
+    color: colors.$gray-900;
+    margin-bottom: 20px;
+  }
+}

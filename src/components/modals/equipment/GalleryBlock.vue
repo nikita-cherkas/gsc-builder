@@ -39,12 +39,14 @@ function closeFullscreen() {
 function prev() {
   if (!hasMultipleImages.value) return
   activeImageIndex.value =
-    (activeImageIndex.value - 1 + galleryImages.value.length) % galleryImages.value.length
+    (activeImageIndex.value - 1 + galleryImages.value.length) %
+    galleryImages.value.length
 }
 
 function next() {
   if (!hasMultipleImages.value) return
-  activeImageIndex.value = (activeImageIndex.value + 1) % galleryImages.value.length
+  activeImageIndex.value =
+    (activeImageIndex.value + 1) % galleryImages.value.length
 }
 
 function handleKeydown(e: KeyboardEvent) {
@@ -64,7 +66,9 @@ onMounted(() =>
   window.addEventListener('keydown', handleKeydown, { capture: true }),
 )
 onUnmounted(() =>
-  window.removeEventListener('keydown', handleKeydown, { capture: true } as EventListenerOptions),
+  window.removeEventListener('keydown', handleKeydown, {
+    capture: true,
+  } as EventListenerOptions),
 )
 </script>
 
@@ -89,10 +93,10 @@ onUnmounted(() =>
 
   <template v-if="hasMultipleImages">
     <button type="button" class="nav-btn nav-prev" aria-label="Previous" @click.stop="prev">
-      <ChevronLeft class="h-5 w-5" />
+      <ChevronLeft />
     </button>
     <button type="button" class="nav-btn nav-next" aria-label="Next" @click.stop="next">
-      <ChevronRight class="h-5 w-5" />
+      <ChevronRight />
     </button>
 
     <div class="equipment-popup__gallery-thumbs-overlay">
@@ -124,17 +128,16 @@ onUnmounted(() =>
         @mousedown.stop
         @click.stop="closeFullscreen"
       >
-        <X class="h-5 w-5" />
+        <X />
       </button>
       <div class="gsc-fullscreen-content" @click.stop>
         <button
           v-if="hasMultipleImages"
           type="button"
           class="gsc-fullscreen-nav gsc-fullscreen-nav--prev"
-          aria-label="Previous"
           @click="prev"
         >
-          <ChevronLeft class="h-5 w-5" />
+          <ChevronLeft />
         </button>
         <img
           v-if="galleryImages[activeImageIndex]"
@@ -146,37 +149,16 @@ onUnmounted(() =>
           v-if="hasMultipleImages"
           type="button"
           class="gsc-fullscreen-nav gsc-fullscreen-nav--next"
-          aria-label="Next"
           @click="next"
         >
-          <ChevronRight class="h-5 w-5" />
+          <ChevronRight />
         </button>
-
-        <div v-if="hasMultipleImages" class="gsc-fullscreen-thumbs">
-          <button
-            v-for="(img, idx) in galleryImages"
-            :key="idx"
-            type="button"
-            class="gsc-fullscreen-thumb"
-            :class="{ 'is-active': activeImageIndex === idx }"
-            @click="activeImageIndex = idx"
-          >
-            <img :src="img" alt="thumb" />
-          </button>
-        </div>
       </div>
     </div>
   </Teleport>
 </template>
 
 <style scoped lang="scss">
-$c-white: #ffffff;
-$c-gray-border: #e5e7eb;
-$c-text-main: #111827;
-$c-text-secondary: #6b7280;
-$c-orange-brand: #f97316;
-$c-bg-light: #f9fafb;
-
 .gallery-slide {
   width: 100%;
   height: 100%;
@@ -185,10 +167,6 @@ $c-bg-light: #f9fafb;
   align-items: center;
   justify-content: center;
   cursor: zoom-in;
-
-  @media (max-width: 780px) {
-    padding: 20px;
-  }
 }
 
 .main-img {
@@ -204,20 +182,19 @@ $c-bg-light: #f9fafb;
   width: 36px;
   height: 36px;
   border-radius: 50%;
-  background: $c-white;
-  border: 1px solid $c-gray-border;
+  background: #fff;
+  border: 1px solid #e5e7eb;
   display: flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
   z-index: 20;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
-  transition: transform 0.1s;
-  color: $c-text-secondary;
+  color: #6b7280;
+  pointer-events: auto;
 
-  &:hover {
-    transform: scale(1.05);
-    color: $c-text-main;
+  svg {
+    width: 16px;
+    height: 16px;
   }
 }
 
@@ -230,17 +207,17 @@ $c-bg-light: #f9fafb;
   height: 40px;
   border-radius: 50%;
   background: rgba(255, 255, 255, 0.9);
-  border: 1px solid $c-gray-border;
+  border: 1px solid #e5e7eb;
   display: flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  color: $c-text-main;
-  opacity: 0;
-  transition: opacity 0.2s, background 0.2s;
+  pointer-events: auto;
+  color: #111827;
 
-  &:hover {
-    background: $c-white;
+  svg {
+    width: 20px;
+    height: 20px;
   }
 }
 
@@ -250,10 +227,6 @@ $c-bg-light: #f9fafb;
 
 .nav-next {
   right: 16px;
-}
-
-.equipment-popup__visual-area-main:hover .nav-btn {
-  opacity: 1;
 }
 
 .equipment-popup__gallery-thumbs-overlay {
@@ -267,18 +240,6 @@ $c-bg-light: #f9fafb;
   padding: 4px;
   border-radius: 8px;
   backdrop-filter: blur(2px);
-
-  @media (max-width: 780px) {
-    bottom: 12px;
-    left: 12px;
-    overflow-x: auto;
-    max-width: calc(100% - 24px);
-
-    &::-webkit-scrollbar {
-      display: none;
-    }
-    scrollbar-width: none;
-  }
 }
 
 .gallery-thumb {
@@ -287,13 +248,12 @@ $c-bg-light: #f9fafb;
   border: 2px solid transparent;
   border-radius: 6px;
   padding: 0;
-  background: $c-white;
+  background: #fff;
   cursor: pointer;
   overflow: hidden;
-  transition: border-color 0.2s;
 
   &.is-active {
-    border-color: $c-orange-brand;
+    border-color: #f97316;
   }
 
   img {
@@ -302,21 +262,9 @@ $c-bg-light: #f9fafb;
     object-fit: cover;
   }
 }
-
-
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
-  }
-}
 </style>
 
 <style lang="scss">
-$c-orange-brand: #f97316;
-
 .gsc-fullscreen-overlay {
   position: fixed;
   inset: 0;
@@ -325,16 +273,6 @@ $c-orange-brand: #f97316;
   display: flex;
   align-items: center;
   justify-content: center;
-  animation: gsc-fs-fade-in 0.2s ease-out;
-  pointer-events: auto;
-}
-
-.gsc-fullscreen-content,
-.gsc-fullscreen-close-btn,
-.gsc-fullscreen-nav,
-.gsc-fullscreen-thumbs,
-.gsc-fullscreen-thumb,
-.gsc-fullscreen-img {
   pointer-events: auto;
 }
 
@@ -353,36 +291,39 @@ $c-orange-brand: #f97316;
   justify-content: center;
   z-index: 2147483647;
   color: #fff;
-  transition: background 0.2s;
-
-  &:hover {
-    background: rgba(255, 255, 255, 0.2);
-  }
+  pointer-events: auto;
 
   svg {
     width: 20px;
     height: 20px;
   }
+
+  &:hover {
+    background: rgba(255, 255, 255, 0.2);
+  }
+}
+
+.gsc-fullscreen-content,
+.gsc-fullscreen-nav,
+.gsc-fullscreen-img {
+  pointer-events: auto;
 }
 
 .gsc-fullscreen-content {
   width: 100%;
   height: 100%;
   display: flex;
-  flex-direction: column;
   justify-content: center;
   align-items: center;
   position: relative;
   gap: 16px;
   padding: 40px 60px;
-  box-sizing: border-box;
 }
 
 .gsc-fullscreen-img {
   max-width: 90vw;
-  max-height: 75vh;
+  max-height: 80vh;
   object-fit: contain;
-  user-select: none;
 }
 
 .gsc-fullscreen-nav {
@@ -399,7 +340,6 @@ $c-orange-brand: #f97316;
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: background 0.2s;
   z-index: 2147483647;
 
   &:hover {
@@ -416,46 +356,6 @@ $c-orange-brand: #f97316;
   }
   &--next {
     right: 20px;
-  }
-}
-
-.gsc-fullscreen-thumbs {
-  display: flex;
-  gap: 10px;
-  padding: 10px;
-  background: rgba(255, 255, 255, 0.1);
-  border-radius: 12px;
-  backdrop-filter: blur(4px);
-}
-
-.gsc-fullscreen-thumb {
-  width: 54px;
-  height: 54px;
-  border: 2px solid transparent;
-  border-radius: 6px;
-  padding: 0;
-  background: #000;
-  cursor: pointer;
-  overflow: hidden;
-  transition: border-color 0.2s;
-
-  &.is-active {
-    border-color: $c-orange-brand;
-  }
-
-  img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-  }
-}
-
-@keyframes gsc-fs-fade-in {
-  from {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
   }
 }
 </style>

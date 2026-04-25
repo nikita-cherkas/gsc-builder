@@ -1,0 +1,26 @@
+@use '@/styles/colors' as colors;
+@use '@/styles/media-breakpoints' as breakpoints;
+
+.base-field {
+  position: relative;
+  height: 46px;
+
+  &__content {
+    height: 100%;
+    display: flex;
+  }
+
+  &__error {
+    position: absolute;
+    top: calc(100% + 2px);
+    left: 0;
+    font-weight: 500;
+    font-size: 12px;
+    line-height: 1.45;
+    color: colors.$red;
+
+    @include breakpoints.media-breakpoint-down(sm) {
+      font-size: 10px;
+    }
+  }
+}

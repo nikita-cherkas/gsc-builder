@@ -21,6 +21,7 @@ export interface CustomerInfo {
   dailyVolume: DailyVolume
   neededBy: string
   notes: string
+  confirmed?: boolean
 }
 
 export interface CustomerValidation {

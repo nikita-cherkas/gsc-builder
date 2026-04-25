@@ -1,0 +1,65 @@
+@use '@/styles/colors' as colors;
+@use '@/styles/media-breakpoints' as breakpoints;
+
+.base-textarea {
+  position: relative;
+  border-radius: 13px;
+
+  &__wrapper {
+    overflow: hidden;
+    position: relative;
+    height: 100%;
+    width: 100%;
+    border-radius: 13px;
+  }
+
+  &__placeholder {
+    font-weight: 500;
+    font-size: 12px;
+    line-height: 1.45;
+    color: colors.$gray-500;
+    width: 90%;
+    display: block;
+    position: absolute;
+    pointer-events: none;
+    left: 15px;
+    top: 15px;
+
+    &_focus {
+      display: none;
+    }
+  }
+
+  &_focus {
+    outline: 1px solid colors.$gray-light;
+  }
+
+  &_error {
+    outline: 1px solid colors.$red;
+
+    .base-input__placeholder {
+      color: colors.$red;
+    }
+  }
+
+  &__input {
+    background-color: colors.$gray-5;
+    color: colors.$black;
+    width: 100%;
+    padding: 15px;
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 1.45;
+    resize: none;
+    height: 100%;
+    border-radius: 13px;
+
+    @include breakpoints.media-breakpoint-down(xs) {
+      font-size: 16px;
+    }
+  }
+
+  :deep(.base-field) {
+    height: 100%;
+  }
+}

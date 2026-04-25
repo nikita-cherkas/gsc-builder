@@ -15,8 +15,8 @@ const swatches = computed(() =>
 </script>
 
 <template>
-  <div class="space-y-3">
-    <p class="text-[12px] text-muted-foreground">
+  <div class="step-top-color">
+    <p class="step-top-color__hint">
       Available finishes depend on the material picked in the previous step.
     </p>
     <SwatchPicker
@@ -26,3 +26,19 @@ const swatches = computed(() =>
     />
   </div>
 </template>
+
+<style lang="scss" scoped>
+@use '@/styles/colors' as colors;
+
+.step-top-color {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+
+  &__hint {
+    color: colors.$gray;
+    font-size: 12px;
+    line-height: 1.5;
+  }
+}
+</style>

@@ -1,40 +1,32 @@
 <script setup lang="ts">
-import { cn } from '@/lib/utils'
+import BaseTextarea from '@/components/base/textarea/BaseTextarea.vue'
 
 interface Props {
   label: string
   modelValue: string
-  hint?: string
   placeholder?: string
+  rows?: number
+  hint?: string
 }
 
-const props = withDefaults(defineProps<Props>(), {
-  hint: '',
+withDefaults(defineProps<Props>(), {
   placeholder: '',
+  rows: 4,
+  hint: '',
 })
 
 defineEmits<{
   (e: 'update:modelValue', v: string): void
 }>()
-
-const inputId = `f-${props.label.replace(/\W/g, '-').toLowerCase()}`
 </script>
 
 <template>
-  <label :for="inputId" class="block">
-    <span class="block mb-1.5 text-[11px] uppercase tracking-wider text-muted-foreground font-semibold">
-      {{ label }}
-    </span>
-    <textarea
-      :id="inputId"
-      :value="modelValue"
-      :placeholder="placeholder"
-      :class="cn(
-        'w-full rounded-lg border px-3 py-2.5 text-[16px] lg:text-[14px] bg-card transition outline-none',
-        'border-border focus:border-primary min-h-[80px] resize-y',
-      )"
-      @input="$emit('update:modelValue', ($event.target as HTMLTextAreaElement).value)"
-    />
-    <span v-if="hint" class="block text-[11px] mt-1 text-muted-foreground">{{ hint }}</span>
-  </label>
+  <BaseTextarea
+    :label="label"
+    :model-value="modelValue"
+    :placeholder="placeholder"
+    :rows="rows"
+    :hint="hint"
+    @update:model-value="$emit('update:modelValue', $event)"
+  />
 </template>

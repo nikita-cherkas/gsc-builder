@@ -31,7 +31,7 @@ const activeInfo = computed(() => {
     @back="infoFor = null"
   />
 
-  <div v-else class="space-y-3">
+  <div v-else class="step-addons">
     <SimpleToggle
       :active="store.config.foldableFlaps"
       :title="ADDON_OPTIONS.foldableFlaps.label"
@@ -52,23 +52,23 @@ const activeInfo = computed(() => {
       @info="infoFor = 'shelfInsert'"
     />
 
-    <div class="rounded-lg border border-border bg-card p-4">
-      <div class="flex items-start justify-between gap-3 mb-1">
-        <span class="font-medium text-[15px] text-foreground">
+    <div class="extra-shelves">
+      <div class="extra-shelves__head">
+        <span class="extra-shelves__title">
           {{ ADDON_OPTIONS.extraShelves.label }}
         </span>
-        <div class="flex items-center gap-2 shrink-0">
-          <span class="text-[11px] uppercase tracking-wider text-muted-foreground font-semibold">
+        <div class="extra-shelves__head-right">
+          <span class="extra-shelves__rate">
             +{{ formatPrice(ADDON_OPTIONS.extraShelves.pricePerUnit) }} each
           </span>
           <InfoButton @click="infoFor = 'extraShelves'" />
         </div>
       </div>
-      <p class="text-[12.5px] text-muted-foreground leading-snug mb-3">
+      <p class="extra-shelves__description">
         {{ ADDON_OPTIONS.extraShelves.description }}
       </p>
-      <div class="flex items-center justify-between">
-        <span class="text-[11px] uppercase tracking-wider text-sub font-semibold">Quantity</span>
+      <div class="extra-shelves__qty">
+        <span class="extra-shelves__qty-label">Quantity</span>
         <Counter
           :value="store.config.extraShelves"
           :min="0"
@@ -79,3 +79,70 @@ const activeInfo = computed(() => {
     </div>
   </div>
 </template>
+
+<style lang="scss" scoped>
+@use '@/styles/colors' as colors;
+
+.step-addons {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.extra-shelves {
+  border: 1px solid colors.$gray-300;
+  background: colors.$white;
+  border-radius: 12px;
+  padding: 16px;
+
+  &__head {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 12px;
+    margin-bottom: 4px;
+  }
+
+  &__title {
+    color: colors.$black;
+    font-size: 15px;
+    font-weight: 600;
+  }
+
+  &__head-right {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    flex-shrink: 0;
+  }
+
+  &__rate {
+    color: colors.$gray;
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+  }
+
+  &__description {
+    color: colors.$gray-900;
+    font-size: 12.5px;
+    line-height: 1.5;
+    margin-bottom: 12px;
+  }
+
+  &__qty {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  &__qty-label {
+    color: colors.$gray;
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+  }
+}
+</style>

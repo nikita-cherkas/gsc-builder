@@ -23,11 +23,42 @@ function handleClick(event: MouseEvent) {
 <template>
   <button
     type="button"
-    class="shrink-0 h-7 w-7 rounded-md border border-border bg-white/70 text-muted-foreground hover:text-foreground hover:border-edge-strong transition flex items-center justify-center"
+    class="info-button"
     :aria-label="ariaLabel"
     title="More info"
     @click="handleClick"
   >
-    <Info class="h-3.5 w-3.5" />
+    <Info />
   </button>
 </template>
+
+<style lang="scss" scoped>
+@use '@/styles/colors' as colors;
+
+.info-button {
+  flex-shrink: 0;
+  width: 28px;
+  height: 28px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid colors.$gray-300;
+  background: rgba(255, 255, 255, 0.8);
+  color: colors.$gray;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: color 0.2s ease, border-color 0.2s ease, background 0.2s ease;
+
+  svg {
+    width: 14px;
+    height: 14px;
+  }
+
+  @media (hover: hover) {
+    &:hover {
+      color: colors.$orange-medium;
+      border-color: colors.$orange-medium;
+    }
+  }
+}
+</style>

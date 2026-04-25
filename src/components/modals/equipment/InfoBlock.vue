@@ -1,54 +1,52 @@
 <script setup lang="ts">
-import { ref, watch, nextTick, onMounted, onUnmounted } from 'vue'
-import type { EquipmentItem } from '@/types'
-
-interface Attr {
-  label: string
-  value: string
-}
-
+import type { EquipmentAttributes, EquipmentItem } from "@/types";
+import { ref, watch, nextTick, onMounted, onUnmounted } from "vue";
 interface Props {
-  selectedEquipment: EquipmentItem
-  attributes: Attr[]
+  selectedEquipment: EquipmentItem;
+  attributes: EquipmentAttributes[];
 }
+const props = defineProps<Props>();
 
-const props = defineProps<Props>()
-
-const descriptionText = ref<HTMLElement | null>(null)
-const descriptionHeight = ref(0)
-let resizeObserver: ResizeObserver | null = null
+const descriptionText = ref<HTMLElement | null>(null);
+const descriptionHeight = ref(0);
+let resizeObserver: ResizeObserver | null = null;
 
 watch(descriptionText, async () => {
-  await nextTick()
-  updateContentHeight()
-})
+  await nextTick();
+  updateContentHeight();
+});
 
 function updateContentHeight() {
-  const el = descriptionText.value
-  if (el) descriptionHeight.value = el.scrollHeight
+  const el = descriptionText.value;
+  if (el) {
+    descriptionHeight.value = el.scrollHeight;
+  }
 }
 
 onMounted(() => {
-  updateContentHeight()
-  resizeObserver = new ResizeObserver(updateContentHeight)
-  if (descriptionText.value) resizeObserver.observe(descriptionText.value)
-})
+  updateContentHeight();
+  resizeObserver = new ResizeObserver(updateContentHeight);
+  if (descriptionText.value) {
+    resizeObserver.observe(descriptionText.value);
+  }
+});
 
-onUnmounted(() => resizeObserver?.disconnect())
+onUnmounted(() => {
+  resizeObserver?.disconnect();
+});
 </script>
-
 <template>
   <div class="equipment-popup__info-block">
     <div
-      v-if="props.selectedEquipment.categories[1]?.name"
       class="equipment-popup__category"
+      v-if="props.selectedEquipment.categories[1].name"
     >
       {{ props.selectedEquipment.categories[1].name }}
     </div>
     <h2 class="equipment-title">{{ props.selectedEquipment.name }}</h2>
     <div
-      v-if="props.selectedEquipment.short_description_for_3d_builder"
       class="equipment-popup__desc"
+      v-if="props.selectedEquipment.short_description_for_3d_builder"
     >
       <div class="equipment-popup__desc-content">
         <div
@@ -57,11 +55,11 @@ onUnmounted(() => resizeObserver?.disconnect())
         />
       </div>
     </div>
-    <div v-if="props.attributes.length" class="equipment-popup__specification">
+    <div class="equipment-popup__specification" v-if="props.attributes">
       <div
+        class="equipment-popup__specification-item"
         v-for="(item, idx) in props.attributes.slice(0, 4)"
         :key="idx"
-        class="equipment-popup__specification-item"
       >
         <h3>{{ item.label }}</h3>
         <p>{{ item.value }}</p>
@@ -71,17 +69,32 @@ onUnmounted(() => resizeObserver?.disconnect())
 </template>
 
 <style scoped lang="scss">
+@use "@/styles/media-breakpoints" as breakpoints;
 $c-white: #ffffff;
-$c-gray-border: #e5e7eb;
+$c-gray-50: #f9fafb;
+$c-gray-100: #f3f4f6;
+$c-gray-200: #e5e7eb;
 $c-gray-500: #6b7280;
-$c-text-main: #111827;
+$c-gray-900: #111827;
+$c-orange-50: #fff7ed;
+$c-orange-500: #f97316;
 $c-orange-600: #ea580c;
-$bp-sm: 575px;
+$c-gray-border: #e5e7eb;
+
+$c-bg-light: #f9fafb;
+$c-gray-border: #e5e7eb;
+$c-text-main: #111827;
+$c-text-secondary: #6b7280;
+$c-orange-brand: #f97316;
+$c-btn-dark: #0f172a;
 
 .equipment-popup__info-block {
-  flex: 1;
+  flex: 1 1 0;
+  min-height: 0;
   overflow-y: auto;
+  overflow-x: hidden;
   padding-right: 8px;
+  max-height: 157px;
 
   &::-webkit-scrollbar {
     width: 4px;
@@ -91,7 +104,7 @@ $bp-sm: 575px;
     border-radius: 4px;
   }
 
-  @media (max-width: $bp-sm) {
+  @include breakpoints.media-breakpoint-down(sm) {
     display: none;
   }
 }
@@ -108,7 +121,8 @@ $bp-sm: 575px;
   font-size: 20px;
   font-weight: 700;
   color: $c-text-main;
-  margin: 0 0 12px 0;
+  margin-bottom: 12px;
+  margin-top: 0;
 }
 
 .equipment-popup__desc {
@@ -119,44 +133,43 @@ $bp-sm: 575px;
   font-size: 14px;
   line-height: 1.6;
   color: $c-gray-500;
-
-  :deep(p) {
-    margin: 0 0 8px 0;
-
-    &:last-child {
-      margin-bottom: 0;
-    }
-  }
 }
 
 .equipment-popup__specification {
   display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 8px;
-}
+  grid-template-columns: 1fr 1fr;
+  gap: 16px 12px;
 
+  @media (max-width: 780px) {
+    gap: 12px 8px;
+  }
+}
 .equipment-popup__specification-item {
   background: #fafafa;
-  padding: 10px;
+  padding: 10px 12px;
   border-radius: 0.625rem;
   font-weight: 500;
   display: grid;
   gap: 4px;
   min-width: 0;
+  width: 90%;
 
   h3 {
     font-size: 12px;
-    color: #6b7280;
+    color: $c-text-secondary;
     margin: 0;
+    text-transform: uppercase;
+    letter-spacing: 0.02em;
     font-weight: 500;
-    overflow-wrap: break-word;
   }
 
   p {
     font-size: 14px;
-    color: #000;
+    color: $c-text-main;
     margin: 0;
-    overflow-wrap: break-word;
+    font-weight: 600;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
 }
 </style>

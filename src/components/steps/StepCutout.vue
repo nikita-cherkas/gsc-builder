@@ -21,7 +21,7 @@ const infoFor = ref<CutoutOption | null>(null)
     @back="infoFor = null"
   />
 
-  <div v-else class="space-y-3">
+  <div v-else class="stack stack_3">
     <RadioCard
       v-for="opt in CUTOUT_OPTIONS"
       :key="opt.id"

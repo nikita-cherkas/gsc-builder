@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import { formatPrice } from '@/lib/formatters'
-import { cn } from '@/lib/utils'
 import InfoButton from './InfoButton.vue'
 
 interface Props {
@@ -23,46 +22,25 @@ const emit = defineEmits<{
 </script>
 
 <template>
-  <div
-    :class="cn(
-      'flex items-start gap-3 rounded-lg border bg-card p-4 transition',
-      active ? 'border-primary' : 'border-border hover:border-foreground/30',
-    )"
-  >
+  <div :class="['simple-toggle', { 'simple-toggle_active': active }]">
     <button
       type="button"
       :aria-pressed="active"
-      class="flex-1 min-w-0 text-left"
+      class="simple-toggle__main"
       @click="emit('toggle')"
     >
-      <div class="flex items-center justify-between gap-3 mb-1.5">
-        <span class="font-medium text-[15px] text-foreground">{{ title }}</span>
-        <span class="flex items-center gap-3 shrink-0">
-          <span
-            v-if="props.price !== undefined"
-            :class="cn(
-              'text-[11px] font-semibold uppercase tracking-wider',
-              active ? 'text-primary' : 'text-muted-foreground',
-            )"
-          >
+      <div class="simple-toggle__head">
+        <span class="simple-toggle__title">{{ title }}</span>
+        <span class="simple-toggle__right">
+          <span v-if="props.price !== undefined" class="simple-toggle__price">
             +{{ formatPrice(props.price) }}
           </span>
-          <span
-            :class="cn(
-              'relative h-5 w-9 rounded-full transition-colors',
-              active ? 'bg-primary' : 'bg-black/15',
-            )"
-          >
-            <span
-              :class="cn(
-                'absolute top-0.5 h-4 w-4 rounded-full bg-white shadow-sm transition-[left] duration-200',
-                active ? 'left-[18px]' : 'left-0.5',
-              )"
-            />
+          <span class="simple-toggle__switch">
+            <span class="simple-toggle__switch-thumb" />
           </span>
         </span>
       </div>
-      <p v-if="description" class="text-[12.5px] text-muted-foreground leading-snug">
+      <p v-if="description" class="simple-toggle__description">
         {{ description }}
       </p>
     </button>
@@ -73,3 +51,108 @@ const emit = defineEmits<{
     />
   </div>
 </template>
+
+<style lang="scss" scoped>
+@use '@/styles/colors' as colors;
+
+.simple-toggle {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 14px;
+  border: 1px solid colors.$gray-300;
+  background: colors.$white;
+  border-radius: 12px;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+
+  &_active {
+    border-color: colors.$orange-medium;
+    box-shadow: 0 0 0 3px rgba(255, 107, 0, 0.08);
+  }
+
+  @media (hover: hover) {
+    &:not(.simple-toggle_active):hover {
+      border-color: colors.$gray-light;
+    }
+  }
+
+  &__main {
+    flex: 1;
+    min-width: 0;
+    text-align: left;
+    border: none;
+    background: transparent;
+    cursor: pointer;
+    padding: 0;
+  }
+
+  &__head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    margin-bottom: 4px;
+  }
+
+  &__title {
+    color: colors.$black;
+    font-size: 15px;
+    font-weight: 600;
+    line-height: 1.3;
+  }
+
+  &__right {
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;
+    flex-shrink: 0;
+  }
+
+  &__price {
+    color: colors.$gray;
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+  }
+
+  &_active &__price {
+    color: colors.$orange-medium;
+  }
+
+  &__switch {
+    position: relative;
+    width: 36px;
+    height: 20px;
+    border-radius: 999px;
+    background: rgba(0, 0, 0, 0.15);
+    transition: background 0.2s ease;
+  }
+
+  &_active &__switch {
+    background: colors.$orange-medium;
+  }
+
+  &__switch-thumb {
+    position: absolute;
+    top: 2px;
+    left: 2px;
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    background: colors.$white;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+    transition: transform 0.2s ease;
+  }
+
+  &_active &__switch-thumb {
+    transform: translateX(16px);
+  }
+
+  &__description {
+    color: colors.$gray-900;
+    font-size: 12.5px;
+    line-height: 1.4;
+  }
+}
+</style>

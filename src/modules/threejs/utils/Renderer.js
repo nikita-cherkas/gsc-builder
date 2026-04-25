@@ -33,7 +33,7 @@ export default class Renderer {
 
     this.setRenderer();
   }
-
+  ё;
   setRenderer() {
     this.instance = new THREE.WebGLRenderer({
       alpha: true,
@@ -52,8 +52,11 @@ export default class Renderer {
     this.instance.outputColorSpace = THREE.SRGBColorSpace;
     const BACKGROUND_COLOR = 0xf5f1ea;
     this.scene.background = new THREE.Color(BACKGROUND_COLOR);
+    this.scene.fog = new THREE.Fog(BACKGROUND_COLOR, 15, 40);
     this.scene.background.colorSpace = THREE.SRGBColorSpace;
-    this.loadEnv(`${import.meta.env.BASE_URL || "/"}threejs/textures/env-map-6.hdr`);
+    this.loadEnv(
+      `${import.meta.env.BASE_URL || "/"}threejs/textures/env-map-6.hdr`,
+    );
 
     this.cssInstance = new CSS3DRenderer();
     this.cssInstance.setSize(this.sizes.width, this.sizes.height);
