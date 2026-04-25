@@ -7,6 +7,7 @@ import { useSceneBuilderStore } from "@/stores/sceneBuilder";
 const store = useConfiguratorStore();
 const sceneBuilder = useSceneBuilderStore();
 const containerRef = ref<HTMLDivElement | null>(null);
+const isLoading = ref(true);
 
 async function loadCartModel(): Promise<THREE.Object3D | null> {
   const gltf = await sceneBuilder.loadModel("/threejs/models/Summit.glb");
@@ -79,7 +80,11 @@ onMounted(async () => {
     isPreview: false,
   });
 
-  const cart = await loadCartModel();
+  const [cart] = await Promise.all([
+    loadCartModel(),
+    sceneBuilder.engine?.floorReady,
+  ]);
+
   if (cart) {
     sceneBuilder.addToScene(cart);
     sceneBuilder.fitCameraToObject(cart, 2);
@@ -104,6 +109,7 @@ onMounted(async () => {
   }
 
   sceneBuilder.setAutoRotate(store.autoRotate);
+  isLoading.value = false;
 });
 
 onBeforeUnmount(() => {
@@ -124,10 +130,19 @@ watch(
 <template>
   <div class="viewport">
     <div ref="containerRef" id="builder" class="viewport__canvas" />
+
+    <Transition name="viewport-loader">
+      <div v-if="isLoading" class="viewport__loader">
+        <div class="viewport__spinner" />
+        <span class="viewport__loader-text">Loading scene…</span>
+      </div>
+    </Transition>
   </div>
 </template>
 
-<style scoped>
+<style scoped lang="scss">
+@use "@/styles/colors" as colors;
+
 .viewport {
   position: relative;
   height: 100%;
@@ -140,5 +155,49 @@ watch(
   position: absolute;
   inset: 0;
   cursor: grab;
+}
+
+.viewport__loader {
+  position: absolute;
+  inset: 0;
+  z-index: 5;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  background: colors.$canvas;
+  pointer-events: auto;
+}
+
+.viewport__spinner {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  border: 3px solid rgba(0, 0, 0, 0.08);
+  border-top-color: colors.$orange-medium;
+  animation: viewport-spin 0.9s linear infinite;
+}
+
+.viewport__loader-text {
+  color: colors.$gray;
+  font-size: 13px;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  font-weight: 600;
+}
+
+@keyframes viewport-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.viewport-loader-leave-active {
+  transition: opacity 0.3s ease;
+}
+
+.viewport-loader-leave-to {
+  opacity: 0;
 }
 </style>

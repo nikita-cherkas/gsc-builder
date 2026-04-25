@@ -31,6 +31,9 @@ export default class CoffeeApplication {
 
   modelRoot: THREE.Object3D | null = null;
 
+  readonly floorReady: Promise<void>;
+  private resolveFloorReady!: () => void;
+
   private disposed = false;
   private readonly defaultCameraPosition = new THREE.Vector3();
   private readonly defaultCameraTarget = new THREE.Vector3();
@@ -41,6 +44,10 @@ export default class CoffeeApplication {
   constructor(options: CoffeeApplicationOptions) {
     this.container = options.container;
     this.isPreview = options.isPreview ?? false;
+
+    this.floorReady = new Promise<void>((resolve) => {
+      this.resolveFloorReady = resolve;
+    });
 
     this.eventEmitter = new EventEmitter();
     this.scene = new THREE.Scene();
@@ -179,14 +186,31 @@ export default class CoffeeApplication {
 
   private initFloor(): void {
     const textureLoader = new THREE.TextureLoader();
-    const path = "/threejs/textures/floor/";
+    const base = import.meta.env.BASE_URL || "/";
+    const path = `${base}threejs/textures/floor/`;
 
-    const mapColor = textureLoader.load(`${path}laminate_floor_02_diff_2k.jpg`);
+    let pending = 3;
+    const onTexLoadedOrFailed = () => {
+      if (--pending === 0) this.resolveFloorReady();
+    };
+
+    const mapColor = textureLoader.load(
+      `${path}laminate_floor_02_diff_2k.jpg`,
+      onTexLoadedOrFailed,
+      undefined,
+      onTexLoadedOrFailed,
+    );
     const mapRoughness = textureLoader.load(
       `${path}laminate_floor_02_rough_2k.jpg`,
+      onTexLoadedOrFailed,
+      undefined,
+      onTexLoadedOrFailed,
     );
     const mapNormal = textureLoader.load(
       `${path}laminate_floor_02_nor_gl_2k.jpg`,
+      onTexLoadedOrFailed,
+      undefined,
+      onTexLoadedOrFailed,
     );
 
     mapColor.colorSpace = THREE.SRGBColorSpace;
